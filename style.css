@@ -1,0 +1,36 @@
+CSS
+html, body {
+  height: 200%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  object-fit: cover;
+  height: 200%;
+  width: 100%;
+}
+.linkedin-button-container {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+  
+  .linkedin-button {
+    background-color: #0077b5;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .linkedin-button:hover {
+    background-color: #006699;
+  }
+  
+  .fa-linkedin {
+    margin-right: 10px;
+  }
