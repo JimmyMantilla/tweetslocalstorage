@@ -1,21 +1,73 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Imagen en pantalla completa</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta del clima</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <img src="hojavida.png" alt="Imagen en pantalla completa">
-  <div class="linkedin-button-container">
-    <a href="https://www.linkedin.com/in/jimmy-mantilla-56744a194" target="_blank">
-      <button class="linkedin-button">
-        <i class="fa fa-linkedin"></i>
-        Link a mi perfil de LinkedIn
-      </button>
-    </a>
-  </div>
-  <script src="app3.js"></script>
+    <div id="container">
+        <h1>Consulta del clima</h1>
+
+        <div id="formulario-container">
+            <form action="#">
+                <label for="pais">País:</label>
+                <select id="pais" name="pais">
+                    <option value="">Selecciona un país</option>
+                    <option value="CO">Colombia</option>
+                    <option value="ES">España</option>
+                    <option value="MX">México</option>
+                    <option value="AR">Argentina</option>
+                    <option value="US">Estados Unidos</option>
+                    <option value="BR">Brasil</option>
+                    <option value="RU">Rusia</option>
+                    <option value="CN">China</option>
+                    <option value="IN">India</option>
+                    <option value="ID">Indonesia</option>
+                    <option value="NG">Nigeria</option>
+                    <option value="PK">Pakistán</option>
+                    <option value="BD">Bangladesh</option>
+                    <option value="JP">Japón</option>
+                    <option value="PH">Filipinas</option>
+                    <option value="EG">Egipto</option>
+                    <option value="ET">Etiopía</option>
+                    <option value="VN">Vietnam</option>
+                    <option value="NGA">Nigeria</option>
+                    <option value="PK">Pakistán</option>
+                    <option value="BD">Bangladesh</option>
+                    <option value="JP">Japón</option>
+                    <option value="PH">Filipinas</option>
+                    <option value="EG">Egipto</option>
+                    <option value="ET">Etiopía</option>
+                    <option value="VN">Vietnam</option>
+                    <option value="TH">Tailandia</option>
+                    <option value="TR">Turquía</option>
+                    <option value="IR">Irán</option>
+                    <option value="FR">Francia</option>
+                    <option value="DE">Alemania</option>
+                    <option value="IT">Italia</option>
+                    <!-- Agrega más países según sea necesario -->
+                </select>
+                <br>
+                <label for="ciudad">Ciudad:</label>
+                <select id="ciudad" name="ciudad" disabled></select>
+                <br>
+                <br>
+                <button id="boton-buscar-clima" type="button">Buscar Clima</button>
+            </form>
+        </div>
+
+        <div id="temperatura-container">
+            <p id="temperatura"></p>
+        </div>
+
+        <div id="resultado-container">
+            <div id="resultado"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
+
