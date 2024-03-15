@@ -1,90 +1,124 @@
-const apiKey = '42649143-8137cd57d7a1d42ed4ef45b78';
-const perPage = 32;
-let totalPages = 10;
-let currentPage = 1;
-
-function searchImages() {
-    const searchTerm = encodeURIComponent(document.getElementById('search').value);
-    const apiUrl = `https://pixabay.com/api/?key=${apiKey}&q=${searchTerm}&per_page=${perPage}&page=${currentPage}`;
-
-    fetch(apiUrl)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Error en la solicitud a la API: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Pixabay API Response:', data);
-
-            if (data.hits && data.hits.length > 0) {
-                totalPages = Math.ceil(data.totalHits / perPage);
-                displayImages(data.hits);
-                displayPagination();
-            } else {
-                console.error('No se encontraron imágenes');
-            }
-        })
-        .catch(error => console.error('Error fetching images:', error));
-}
-
-function displayImages(images) {
-    const gallery = document.getElementById('gallery');
-    gallery.innerHTML = '';
-
-    images.forEach(image => {
-        const container = document.createElement('div');
-        container.classList.add('image-container');
-
-        const imgElement = document.createElement('img');
-        imgElement.src = image.webformatURL;
-        imgElement.alt = image.tags;
-        imgElement.classList.add('image');
-        imgElement.addEventListener('click', () => openLightbox(image.largeImageURL));
-
-        container.appendChild(imgElement);
-        gallery.appendChild(container);
-    });
-}
-
-function displayPagination() {
-    const pagination = document.querySelector('.pagination');
-    pagination.innerHTML = '';
-
-    for (let i = 1; i <= totalPages; i++) {
-        const pageLink = document.createElement('a');
-        pageLink.href = '#';
-        pageLink.classList.add('page-link');
-        pageLink.textContent = i;
-        pageLink.addEventListener('click', function () {
-            goToPage(i);
-        });
-
-        if (i === currentPage) {
-            pageLink.classList.add('active');
-        }
-
-        pagination.appendChild(pageLink);
+// Función para agregar un tweet
+function agregarTweet() {
+    var tweetInput = document.getElementById('tweetInput');
+    var tweetList = document.getElementById('tweetList');
+    var advertencia = document.getElementById('advertencia');
+  
+    if (tweetInput.value.trim() !== '') {
+      var tweet = document.createElement('div');
+      tweet.className = 'tweet';
+  
+      // Contenido del tweet
+      var tweetText = document.createElement('span');
+      tweetText.textContent = tweetInput.value;
+      tweet.appendChild(tweetText);
+  
+      // Botón "X" para eliminar el tweet
+      var deleteButton = document.createElement('button');
+      deleteButton.className = 'delete-button';
+      deleteButton.textContent = 'Eliminar';
+      deleteButton.onclick = function() {
+        borrarTweet(tweet);
+      };
+      tweet.appendChild(deleteButton);
+  
+      tweetList.appendChild(tweet);
+  
+      // Limpiar el campo de texto
+      tweetInput.value = '';
+  
+      // Desplazar el scroll hacia abajo para mostrar el tweet recién agregado
+      tweetList.scrollTop = tweetList.scrollHeight;
+  
+      // Guardar el tweet en localStorage
+      guardarTweetEnLocalStorage(tweetText.textContent);
+  
+      // Ocultar la advertencia si estaba visible
+      advertencia.style.display = 'none';
+    } else {
+      // Mostrar la advertencia
+      mostrarAdvertencia();
+  
+      // Ocultar la advertencia después de 3 segundos
+      setTimeout(function() {
+        advertencia.style.display = 'none';
+      }, 3000);
     }
-}
+  }
 
-function goToPage(page) {
-    currentPage = page;
-    searchImages();
-}
-
-function openLightbox(imageUrl) {
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-
-    lightboxImg.src = imageUrl;
-    lightbox.style.display = 'flex';
-}
-
-function closeLightbox() {
-    document.getElementById('lightbox').style.display = 'none';
-}
-
-// Inicializar la página con la primera búsqueda
-searchImages();
-
+  function mostrarAdvertencia() {
+    var advertencia = document.getElementById('advertencia');
+    advertencia.style.display = 'flex';
+  }
+  
+  // Función para guardar un tweet en localStorage
+  function guardarTweetEnLocalStorage(tweet) {
+    var tweets = obtenerTweetsDesdeLocalStorage() || [];
+    tweets.push(tweet);
+    localStorage.setItem('tweets', JSON.stringify(tweets));
+  }
+  
+  // Función para obtener tweets desde localStorage
+  function obtenerTweetsDesdeLocalStorage() {
+    var tweets = localStorage.getItem('tweets');
+    return JSON.parse(tweets);
+  }
+  
+  // Función para cargar los tweets desde localStorage al cargar la página
+  function cargarTweetsDesdeLocalStorage() {
+    var tweets = obtenerTweetsDesdeLocalStorage();
+  
+    if (tweets) {
+      var tweetList = document.getElementById('tweetList');
+  
+      tweets.forEach(function(tweetText) {
+        agregarTweetDOM(tweetText);
+      });
+    }
+  }
+  
+  // Función para agregar un tweet al DOM
+  function agregarTweetDOM(tweetText) {
+    var tweetList = document.getElementById('tweetList');
+    var tweet = document.createElement('div');
+    tweet.className = 'tweet';
+  
+    // Contenido del tweet
+    var tweetContent = document.createElement('span');
+    tweetContent.textContent = tweetText;
+    tweet.appendChild(tweetContent);
+  
+    // Botón "X" para eliminar el tweet
+    var deleteButton = document.createElement('button');
+    deleteButton.className = 'delete-button';
+    deleteButton.textContent = 'Eliminar';
+    deleteButton.onclick = function() {
+      borrarTweet(tweet);
+    };
+    tweet.appendChild(deleteButton);
+  
+    tweetList.appendChild(tweet);
+  }
+  
+  // Función para borrar un tweet del DOM y de localStorage
+  function borrarTweet(tweet) {
+    var tweetList = document.getElementById('tweetList');
+    tweetList.removeChild(tweet);
+  
+    var tweets = obtenerTweetsDesdeLocalStorage() || [];
+    var tweetText = tweet.querySelector('span').textContent;
+    var index = tweets.indexOf(tweetText);
+  
+    if (index !== -1) {
+      tweets.splice(index, 1);
+      localStorage.setItem('tweets', JSON.stringify(tweets));
+    }
+  }
+  
+  // Cargar los tweets almacenados al cargar la página
+  cargarTweetsDesdeLocalStorage();
+  
+  
+  
+  
+  
